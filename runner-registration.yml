@@ -1,0 +1,19 @@
+- hosts: gitlab-server
+  become: true
+  vars_prompt:
+    - name: runner_registration_token
+      prompt: "Please enter the runner registration token"
+      private: no
+    - name: gitlab_url
+      prompt: "Please enter your gitlab url"
+      private: no
+    - name: runner_docker_image
+      prompt: "Please enter the runner docker image"
+      private: no
+    
+  tasks:
+  - name: register runner
+    community.docker.docker_container_exec:
+      container: gitlab-runner
+      command: /bin/bash -c "gitlab-runner register --non-interactive --executor "docker" --url "{{ gitlab_url }}" --token "{{ runner_registration_token }}" --docker-image "{{ runner_docker_image }}" " 
+      chdir: /
