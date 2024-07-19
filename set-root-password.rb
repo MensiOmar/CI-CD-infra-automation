@@ -1,4 +1,0 @@
-user = User.find_by(username: 'root')
-user.password = 'New_password'
-user.password_confirmation = 'New_password'
-user.save!
