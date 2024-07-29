@@ -1,0 +1,12 @@
+# - hosts: jenkins_server
+#   become: true
+#   roles:
+#     - jenkins
+- hosts: agent
+  become: true
+  #become_method: sudo
+  #become_user : root
+  roles:
+    - prerequisites
+    # - jenkins
+    # - traefik

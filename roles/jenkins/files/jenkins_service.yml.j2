@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jenkins.rule=Host(`{{host}}`)"
+      - "traefik.http.routers.jenkins.entrypoints=websecure"
+      - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
+      - "traefik.http.routers.jenkins.tls.certresolver=staging" 
+      - "traefik.http.routers.jenkins.tls.domains[0].main={{domain}}" 
+     # - "traefik.http.routers.jenkins.tls.domains[0].sans=*.splus.tn"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - {{ jenkins_dir }}/jenkins_home:/var/jenkins_home
+      - {{ jenkins_dir }}/jenkins_docker:/var/jenkins_docker
+    restart: always
+#    networks:
+#      - jenkins-network
+
+networks:
+  default:
+    name: tr_network

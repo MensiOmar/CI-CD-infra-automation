@@ -1,0 +1,5 @@
+---
+# handlers file for jenkins
+- name: Print Initial Admin Password
+  ansible.builtin.debug:
+    msg: "The initial admin password is: {{ password.stdout }}"

@@ -1,0 +1,6 @@
+---
+# vars file for jenkins
+
+jenkins_dir: /srv/jenkins
+host : jenkins.splus.tn
+domain: jenkins.splus.tn
