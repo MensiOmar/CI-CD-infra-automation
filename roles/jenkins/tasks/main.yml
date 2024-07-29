@@ -45,17 +45,17 @@
     delay: 10
     timeout: 300
   register: jenkins_available
-# - name: Wait for Jenkins admin password file to be created
-#   wait_for:
-#     path: "{{ jenkins_dir }}/jenkins_home/secrets/initialAdminPassword"
-#     state: present
-#     delay: 10  # Initial delay before checking the file
-#     timeout: 400  # Total time to wait for the file
-#   register: file_wait
-#   when: jenkins_available  # Ensure Jenkins is set up before checking
+- name: Wait for Jenkins admin password file to be created
+  wait_for:
+    path: "{{ jenkins_dir }}/jenkins_home/secrets/initialAdminPassword"
+    state: present
+    delay: 10  # Initial delay before checking the file
+    timeout: 400  # Total time to wait for the file
+  register: file_wait
+  when: jenkins_available  # Ensure Jenkins is set up before checking
 
-# - name: Get the initial admin password for Jenkins
-#   shell: cat "{{ jenkins_dir }}/jenkins_home/secrets/initialAdminPassword"
-#   register: password
-#   when: file_wait  # Execute only if the file was found
-#   notify: Print Initial Admin Password
+- name: Get the initial admin password for Jenkins
+  shell: cat "{{ jenkins_dir }}/jenkins_home/secrets/initialAdminPassword"
+  register: password
+  when: file_wait  # Execute only if the file was found
+  notify: Print Initial Admin Password
