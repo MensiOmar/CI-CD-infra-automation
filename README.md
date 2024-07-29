@@ -26,9 +26,9 @@ ansible-playbook --ask-become-pass gitlab-installation.yml
    **Note:** The prerequisetes phase is specific to Ubuntu 20.04 machines, else you can use machines that already has docker , docker compose plugin and docker ,docker compose python sdks installed  .
 
 
-### Phase 4: Set Admin Password
+### Phase 3: Set Admin Password
 
-4. Change the admin password for GitLab once gitlab is running:
+3. Change the admin password for GitLab once gitlab is running:
 
    run the configuration playbook:
 
@@ -36,7 +36,7 @@ ansible-playbook --ask-become-pass gitlab-installation.yml
 ansible-playbook --ask-become-pass gitlab-configuration.yml -v
 ```
 
-### Phase 5: Register GitLab Runner (Optional)
+### Phase 4: Register GitLab Runner (Optional)
 
 If you wish to register a newly created runner:
 
