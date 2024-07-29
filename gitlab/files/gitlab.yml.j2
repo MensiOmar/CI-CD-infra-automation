@@ -1,0 +1,44 @@
+version: '3.6'
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: gitlab
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.gitlab.rule=Host(`172.18.0.2`)"
+    #   - "traefik.http.routers.gitlab.entrypoints=websecure"
+    #   - "traefik.http.services.gitlab.loadbalancer.server.port=80"
+    #   - "traefik.http.routers.gitlab.tls.certresolver=staging" # Assuming you have a resolver named 'myresolver'
+    #   - "traefik.http.routers.gitlab.tls.domains[0].main=172.18.0.2" # Or your domain name if using one
+    #   - "traefik.http.routers.gitlab.tls.domains[0].sans=*.172.18.0.2"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        # Add any other gitlab.rb configuration here, each on its own line
+        external_url 'http://172.18.0.2:80'
+        nginx['listen_port'] = 80
+    ports:
+      #- '80:80'
+      - '443:443'
+      - '2022:22'
+    volumes:
+      - {{gitlab_dir}}/config:/etc/gitlab
+      - {{gitlab_dir}}/logs:/var/log/gitlab
+      - {{gitlab_dir}}/data:/var/opt/gitlab
+    shm_size: '256m'
+    logging:
+      options:
+        max-size: 100mb
+    #network_mode: host
+    networks:
+      gitlab_network:
+        ipv4_address: 172.18.0.2
+networks:
+  gitlab_network:
+    name: gitlab_network
+    driver: bridge
+    ipam:
+      config:
+      -
+        subnet: 172.18.0.0/16

@@ -1,0 +1,9 @@
+---
+# tasks file for register-runner
+- name: register runner
+  community.docker.docker_container_exec:
+    container: gitlab-runner
+    command: /bin/bash -c "gitlab-runner register --non-interactive --executor "docker" --url "{{ gitlab_url }}" --token "{{ runner_registration_token }}" --docker-network-mode "{{ gitlab_docker_compose_network }}"  --docker-image "{{ runner_docker_image }}" " 
+    #command: /bin/bash -c "gitlab-runner register --non-interactive --executor "shell" --url "{{ gitlab_url }}" --token "{{ runner_registration_token }}" " 
+    
+    chdir: /

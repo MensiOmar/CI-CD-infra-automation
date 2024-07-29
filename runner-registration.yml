@@ -1,0 +1,15 @@
+- hosts: gitlab-server
+  become: true
+  vars_prompt:
+    - name: runner_registration_token
+      prompt: "Please enter the runner registration token"
+      private: no
+    - name: gitlab_url
+      prompt: "Please enter your gitlab url"
+      private: no
+    - name: runner_docker_image
+      prompt: "Please enter the runner docker image"
+      private: no
+    
+  roles :
+    - register-runner

@@ -1,0 +1,26 @@
+version: '3.6'
+services:
+  gitlab-runner:
+    labels:
+      - "traefik.enable=false"
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - {{gitlab_runner_dir}}/gitlab-runner-config:/etc/gitlab-runner
+      #- /gitlab-runner/config.toml:/etc/gitlab-runner/config.toml
+    #network_mode: host
+    networks:
+      gitlab_network:
+        ipv4_address: 172.18.0.3
+
+networks:
+  gitlab_network:
+    external: true
+    name: gitlab_network
+    driver: bridge
+    ipam:
+      config:
+      -
+        subnet: 172.18.0.0/16

@@ -1,0 +1,5 @@
+---
+# vars file for change-root-password
+gitlab_dir: /srv/gitlab/
+gitlab_container_path : /tmp
+script_file_name : set-root-password.rb
