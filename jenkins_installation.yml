@@ -9,6 +9,6 @@
   #become_method: sudo
   #become_user : root
   roles:
-    #- prerequisites
+    - prerequisites
     - jenkins
     # - traefik
