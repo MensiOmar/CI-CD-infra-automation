@@ -1,49 +1,48 @@
 ---
 # #tasks file for prerequisites
-- name: Install docker dependencies
-  become_user : "{{ root_user }}"
+- name: Install aptitude
   apt:
-    name:
+    name: aptitude
+    state: latest
+    update_cache: true
+
+- name: Install required system packages
+  apt:
+    pkg:
       - apt-transport-https
       - ca-certificates
       - curl
-      - gnupg-agent
       - software-properties-common
-      - python3-apt  
-    #update_cache: true
-# - name: Add docker gpg key
-#   become_user : "{{ root_user }}"
-#   ansible.builtin.apt_key:
-#     url: https://download.docker.com/linux/ubuntu/gpg
-#     state: present
-#     keyring: /etc/apt/keyrings/docker.gpg
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
 
-# - name: Add docker repository
-#   become_user : "{{ root_user }}"
-#   ansible.builtin.apt_repository:
-#     filename: docker
-#     repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename | lower }} stable
-#     state: present
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
 
-- name: Install docker engine
-  become_user : "{{ root_user }}"
-  ansible.builtin.apt:
-    name:
-      - docker-io
-      #- docker-io-cli
-      #- containerd.io
-      - docker-buildx-plugin
-      - docker-scan-plugin
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt:
+    name: 
+      - docker-ce
       - docker-compose-plugin
-    #update_cache: true
-- name: install python package manager
-  become_user : "{{ root_user }}"
-  apt: 
-    name: python3-pip
-- name: install python docker sdk
-  become_user : "{{ root_user }}"
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+    state: latest
+    update_cache: true
+
+- name: Install Docker Module for Python
   pip:
-  
-    name:
+    name: 
       - docker
-      - docker-compose 
+      - docker-compose
+      

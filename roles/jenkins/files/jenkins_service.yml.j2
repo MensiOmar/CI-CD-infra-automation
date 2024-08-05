@@ -6,11 +6,11 @@ services:
     container_name: jenkins
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jenkins.rule=Host(`{{host}}`)"
+      - "traefik.http.routers.jenkins.rule=Host(`jenkins.splus.tn`)"
       - "traefik.http.routers.jenkins.entrypoints=websecure"
       - "traefik.http.services.jenkins.loadbalancer.server.port=8080"
-      - "traefik.http.routers.jenkins.tls.certresolver=staging" 
-      - "traefik.http.routers.jenkins.tls.domains[0].main={{domain}}" 
+      - "traefik.http.routers.jenkins.tls.certresolver=staging" # Assuming you have a resolver named 'myresolver'
+      - "traefik.http.routers.jenkins.tls.domains[0].main=jenkins.splus.tn" # Or your domain name if using one
      # - "traefik.http.routers.jenkins.tls.domains[0].sans=*.splus.tn"
     ports:
       - "8080:8080"
@@ -19,8 +19,6 @@ services:
       - {{ jenkins_dir }}/jenkins_home:/var/jenkins_home
       - {{ jenkins_dir }}/jenkins_docker:/var/jenkins_docker
     restart: always
-#    networks:
-#      - jenkins-network
 
 networks:
   default:

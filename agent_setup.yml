@@ -1,0 +1,11 @@
+- name: Generate SSH key on master
+  become: true 
+  hosts: jenkins_server
+  roles:
+    - generate-ssh-key
+- hosts : agent
+  become: true
+  become_user: root
+  roles:
+    - prerequisites
+    - jenkins_agent_creation

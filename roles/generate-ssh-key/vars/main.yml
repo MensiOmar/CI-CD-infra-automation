@@ -1,0 +1,6 @@
+---
+# vars file for generate-ssh-key
+ssh_key_path: /jenkins_home/.ssh
+jenkins_dir : /srv/jenkins 
+ssh_key_name: agent_1
+agent_host : jenkins_controller_1

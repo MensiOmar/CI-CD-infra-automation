@@ -1,0 +1,5 @@
+# Dockerfile
+FROM {{agent_base_image}}
+
+# Install docker-cli and docker-compose
+RUN apk update && apk add docker-cli docker-compose

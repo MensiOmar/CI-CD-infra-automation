@@ -1,2 +1,7 @@
 ---
 # vars file for jenkins_agent_creation
+agent_container_name : jenkins-slave
+agent_base_image: jenkins/ssh-agent:alpine-jdk17
+ssh_agent_publish_port : 2200
+agent_image : jenkins_agent
+agent_host : jenkins_controller_1

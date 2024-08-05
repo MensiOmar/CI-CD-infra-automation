@@ -1,2 +1,47 @@
 ---
 # tasks file for jenkins_agent_creation
+# - name: Update the package index
+#   ansible.builtin.apt:
+#     update_cache: yes
+
+# - name: Install OpenJDK 11
+#   ansible.builtin.apt:
+#     name: openjdk-11-jdk
+#     state: present
+
+# - name: Verify Java installation
+#   ansible.builtin.command: java -version
+#   register: java_version
+
+# - name: Display Java version
+#   ansible.builtin.debug:
+#     msg: "{{ java_version.stderr_lines }}"
+
+# - name: Create /home/jenkins directory
+#   ansible.builtin.file:
+#     path: /home/jenkins
+#     state: directory
+#     owner: ubuntu
+#     mode: '0755'
+- name: Debug hostvars for agent_host
+  ansible.builtin.debug:
+    msg: "{{hostvars[agent_host]}}"
+- name: copy custom SSH Agent dockerfile 
+  ansible.builtin.template:
+    src: custom_agent_dockerFile.j2
+    dest: /home/custom_agent_dockerFile
+- name: build custom SSH jenkins agent image
+  community.docker.docker_image_build:
+      name: "{{ agent_image }}"
+      path: /home
+      dockerfile: /home/custom_agent_dockerFile
+- name: Run Jenkins SSH Agent container
+  ansible.builtin.shell: |
+    docker run -u root -d --restart=always --name={{ agent_container_name }} -p {{ssh_agent_publish_port}}:22 -v /var/run/docker.sock:/var/run/docker.sock -v /home/cdc/deployment:/deployment -v /srv:/srv -e "JENKINS_AGENT_SSH_PUBKEY={{ hostvars[agent_host]['ssh_public_key'] }}" {{ agent_image }}
+- name: Display jenkins ssh credentials info
+  ansible.builtin.debug:
+    msg: 
+      ssh_username: "jenkins"
+      directory: "/home/jenkins/agent"
+      private_key: "{{ hostvars[agent_host]['private_key'].stdout_lines }}"
+      ssh_port: "{{ ssh_agent_publish_port }}"
