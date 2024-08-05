@@ -28,17 +28,14 @@
     mode: '0644'
 - name: destroy existing jenkins service
   become_user : root
-  community.docker.docker_compose:
-    project_src: "{{jenkins_dir}}"
-    files:
-      - jenkins_service.yml
-    state: absent
+  command: docker-compose -f "{{ jenkins_dir }}/jenkins_service.yml" down
+  args:
+    chdir: "{{ jenkins_dir }}"
 - name: Create and start jenkins service
-  community.docker.docker_compose:
-    project_src: "{{jenkins_dir}}"
-    files:
-      - jenkins_service.yml
-    state: present
+  become_user : root
+  command: docker-compose -f "{{ jenkins_dir }}/jenkins_service.yml" up -d
+  args:
+    chdir: "{{ jenkins_dir }}"
 - name: Wait for Jenkins to Start
   wait_for:
     port: 8080
