@@ -4,6 +4,5 @@
   become_user : root
   roles:
     - prerequisites
-    - jenkins
-    #- traefik
-    
+    # - jenkins
+    # - traefik
