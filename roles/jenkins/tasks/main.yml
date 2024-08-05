@@ -28,13 +28,13 @@
     mode: '0644'
 - name: destroy existing jenkins service
   become_user : root
-  community.docker.docker_compose_v2:
+  community.docker.docker_compose:
     project_src: "{{jenkins_dir}}"
     files:
       - jenkins_service.yml
     state: absent
 - name: Create and start jenkins service
-  community.docker.docker_compose_v2:
+  community.docker.docker_compose:
     project_src: "{{jenkins_dir}}"
     files:
       - jenkins_service.yml
