@@ -3,6 +3,8 @@
 #   roles:
 #     - jenkins
 - hosts: jenkins_server
+  collections:
+    - community.docker
   become: true
   #become_method: sudo
   #become_user : root
