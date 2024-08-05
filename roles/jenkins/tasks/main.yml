@@ -28,12 +28,12 @@
     mode: '0644'
 - name: destroy existing jenkins service
   become_user : root
-  command: docker-compose -f "{{ jenkins_dir }}/jenkins_service.yml" down
+  command: docker compose -f "{{ jenkins_dir }}/jenkins_service.yml" down
   args:
     chdir: "{{ jenkins_dir }}"
 - name: Create and start jenkins service
   become_user : root
-  command: docker-compose -f "{{ jenkins_dir }}/jenkins_service.yml" up -d
+  command: docker compose -f "{{ jenkins_dir }}/jenkins_service.yml" up -d
   args:
     chdir: "{{ jenkins_dir }}"
 - name: Wait for Jenkins to Start
