@@ -1,0 +1,33 @@
+api:
+  dashboard: true
+#  disableDashboardAd: true
+  insecure: true
+entryPoints:
+  web:
+    address: :80
+    # -- (Optional) Redirect all HTTP to HTTPS
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: :443
+  # -- (Optional) Add custom Entrypoint
+  # custom:
+  #   address: :8080
+
+certificatesResolvers:
+  staging:
+    acme:
+      email: mensiomar80@gmail.com
+      storage: /etc/traefik/certs/acme.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      # -- (Optional) Remove this section, when using DNS Challenge
+      httpChallenge:
+        entryPoint: web
+providers:
+  docker:
+    # -- (Optional) Enable this, if you want to expose all containers automatically
+    exposedByDefault: false
+

@@ -1,0 +1,28 @@
+---
+# tasks file for gitlab
+- name: create mount folder for gitlab
+  file: 
+    path: "{{gitlab_dir}}"
+    state: directory
+    mode: '0755'
+- name: copy docker-compose files for gitlab 
+  ansible.builtin.template:
+    src: ../files/gitlab.yml.j2
+    dest: "{{gitlab_dir}}/gitlab.yml"
+    mode: '0644'
+- name: tear down existing services
+  community.docker.docker_compose_v2:
+    project_src: "{{gitlab_dir}}"
+    files:
+      - gitlab.yml
+    state: absent
+- name: Create and start services
+  community.docker.docker_compose_v2:
+    project_src: "{{gitlab_dir}}"
+    files:
+      - gitlab.yml
+    state: present
+  register: output
+- name: Debug output
+  debug:
+    var: output

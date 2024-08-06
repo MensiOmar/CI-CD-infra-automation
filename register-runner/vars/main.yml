@@ -1,0 +1,3 @@
+---
+# vars file for register-runner
+gitlab_docker_compose_network : gitlab_network
