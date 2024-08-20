@@ -21,3 +21,9 @@
     files:
       - sonarqube.yml
     state: present
+- name: Print SonarQube default login credentials
+  debug:
+    msg: |
+      SonarQube Default Login Credentials:
+      Username: admin
+      Password: admin
