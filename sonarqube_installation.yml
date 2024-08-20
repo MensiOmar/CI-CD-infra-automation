@@ -1,0 +1,6 @@
+- hosts: sonarqube_server
+  become: true
+  become_method: sudo
+  become_user : root
+  roles:
+    - sonarqube
