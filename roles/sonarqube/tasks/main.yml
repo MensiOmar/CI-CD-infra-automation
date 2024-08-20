@@ -22,7 +22,7 @@
     mode: '0755'
 - name: copy docker compose file 
   ansible.builtin.template:
-    src: sonarqube.yml.j2
+    src: ../templates/sonarqube.yml.j2
     dest: "{{sonarqube_dir}}/sonarqube.yml"
 - name: setup sonarqube service
   community.docker.docker_compose_v2:
