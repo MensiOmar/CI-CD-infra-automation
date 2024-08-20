@@ -1,0 +1,6 @@
+---
+# vars file for sonarqube
+sonarqube_dir : /srv/sonarqube
+sonarqube_data_dir : /srv/sonarqube/sonarqube_data
+sonarqube_logs_dir : /srv/sonarqube/sonarqube_logs
+sonarqube_extentions_dir : /srv/sonarqube/sonarqube_extentions

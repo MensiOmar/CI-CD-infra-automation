@@ -1,0 +1,32 @@
+---
+# tasks file for sonarqube
+- name: create sonqrqube main folder
+  file: 
+    path: "{{sonarqube_dir}}"
+    state: directory
+    mode: '0755'
+- name: create sonqrqube data mount folder
+  file: 
+    path: "{{sonarqube_data_dir}}"
+    state: directory
+    mode: '0755'
+- name: create sonqrqube logs mount folder
+  file: 
+    path: "{{sonarqube_logs_dir}}"
+    state: directory
+    mode: '0755'
+- name: create sonqrqube extentions mount folder
+  file: 
+    path: "{{sonarqube_extentions_dir}}"
+    state: directory
+    mode: '0755'
+- name: copy docker compose file 
+  ansible.builtin.template:
+    src: sonarqube.yml.j2
+    dest: "{{sonarqube_dir}}/sonarqube.yml"
+- name: setup sonarqube service
+  community.docker.docker_compose_v2:
+    project_src: "{{sonarqube_dir}}"
+    files:
+      - sonarqube.yml
+    state: present
