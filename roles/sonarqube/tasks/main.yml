@@ -1,5 +1,11 @@
 ---
 # tasks file for sonarqube
+- name: Set the required sysctl value for Elasticsearch
+  ansible.builtin.sysctl:
+    name: vm.max_map_count
+    value: 262144
+    state: present
+    reload: yes
 - name: create sonqrqube main folder
   file: 
     path: "{{sonarqube_dir}}"
