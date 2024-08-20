@@ -5,21 +5,6 @@
     path: "{{sonarqube_dir}}"
     state: directory
     mode: '0755'
-- name: create sonqrqube data mount folder
-  file: 
-    path: "{{sonarqube_data_dir}}"
-    state: directory
-    mode: '0755'
-- name: create sonqrqube logs mount folder
-  file: 
-    path: "{{sonarqube_logs_dir}}"
-    state: directory
-    mode: '0755'
-- name: create sonqrqube extentions mount folder
-  file: 
-    path: "{{sonarqube_extentions_dir}}"
-    state: directory
-    mode: '0755'
 - name: copy docker compose file 
   ansible.builtin.template:
     src: ../templates/sonarqube.yml.j2
