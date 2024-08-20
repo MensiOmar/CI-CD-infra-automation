@@ -1,7 +1,6 @@
 - hosts: gitlab-server
   become: true
   roles:
-    #- prerequisites
+    - prerequisites
     - gitlab
     - gitlab-runner
-    #- traefik
