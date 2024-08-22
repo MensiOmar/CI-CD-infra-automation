@@ -8,7 +8,7 @@
     owner: 1000
     group: 1000
 - name: Generate SSH key pair
-  ansible.builtin.openssh_keypair:
+  community.crypto.openssh_keypair:
     path: "{{jenkins_dir}}{{ ssh_key_path }}/{{ssh_key_name}}"
     type: ed25519
     size: 2048
