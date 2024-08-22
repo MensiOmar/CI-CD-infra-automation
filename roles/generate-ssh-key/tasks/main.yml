@@ -43,7 +43,7 @@
         Credentials privateKeyCredential = new BasicSSHUserPrivateKey(
           CredentialsScope.GLOBAL,     // scope
           'slave-private-key', // id
-          jenkins,                    // username
+          'jenkins',                    // username
           privateKeySource,            // private key source
           '',                          // passphrase
           'slave SSH key'         // description
