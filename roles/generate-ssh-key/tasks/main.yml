@@ -24,3 +24,31 @@
     ssh_public_key: "{{ ssh_key.public_key }}"
     ssh_private_key: "{{ private_key.stdout }}"
   delegate_to: "{{agent_host}}"
+- name: Setting master using a variable to hold a more complicate script
+  ansible.builtin.set_fact:
+    add_jenkins_agent_ssh_credencials_script: |
+        import com.cloudbees.jenkins.plugins.sshcredentials.impl.*
+        import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey.DirectEntryPrivateKeySource
+        import com.cloudbees.plugins.credentials.*
+        import com.cloudbees.plugins.credentials.domains.*
+        import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
+
+        //String privateKeyText = new File('/ssh-keys/{{ssh_key_name}}').text
+        DirectEntryPrivateKeySource privateKeySource = new DirectEntryPrivateKeySource("{{private_key.stdout}}")
+        Credentials privateKeyCredential = new BasicSSHUserPrivateKey(
+          CredentialsScope.GLOBAL,     // scope
+          'slave-private-key', // id
+          jenkins,                    // username
+          privateKeySource,            // private key source
+          '',                          // passphrase
+          'slave SSH key'         // description
+        )
+        SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), privateKeyCredential)
+
+- name: add ssh agent credentials to jenkins master
+  community.general.jenkins_script:
+    script: "{{add_jenkins_agent_ssh_credencials_script}}"
+    user: "{{jenkins_user}}"
+    password: "{{jenkins_password}}"
+    url: "{{jenkins_url}}"
+    validate_certs: false
