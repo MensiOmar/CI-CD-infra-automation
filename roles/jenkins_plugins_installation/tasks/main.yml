@@ -3,42 +3,42 @@
 - name: Install plugin SonarQube Scanner
   community.general.jenkins_plugin:
     name: SonarQube Scanner
-    url_username: {{ jenkins_username }}
-    url_password: {{ jenkins_password }}
-    url: {{ jenkins_url }}
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
 - name: Install plugin Harbor
   community.general.jenkins_plugin:
     name: Harbor
-    url_username: {{ jenkins_username }}
-    url_password: {{ jenkins_password }}
-    url: {{ jenkins_url }}
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
 - name: Install plugin Maven Integration
   community.general.jenkins_plugin:
     name: Maven Integration
-    url_username: {{ jenkins_username }}
-    url_password: {{ jenkins_password }}
-    url: {{ jenkins_url }}
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
 - name: Install plugin Docker
   community.general.jenkins_plugin:
     name: Docker
-    url_username: {{ jenkins_username }}
-    url_password: {{ jenkins_password }}
-    url: {{ jenkins_url }}
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
 - name: Install plugin Docker API
   community.general.jenkins_plugin:
     name: Docker API
-    url_username: {{ jenkins_username }}
-    url_password: {{ jenkins_password }}
-    url: {{ jenkins_url }}
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
 - name: Install plugin Dependency-check
   community.general.jenkins_plugin:
     name: OWASP Dependency-Check
-    url_username: {{ jenkins_username }}
-    url_password: {{ jenkins_password }}
-    url: {{ jenkins_url }}
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
 - name: Install plugin Deploy to container
   community.general.jenkins_plugin:
     name: Deploy to container
-    url_username: {{ jenkins_username }}
-    url_password: {{ jenkins_password }}
-    url: {{ jenkins_url }}
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
