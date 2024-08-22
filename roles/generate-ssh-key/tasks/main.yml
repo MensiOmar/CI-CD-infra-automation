@@ -16,6 +16,9 @@
 - name: Get the initial admin password for Jenkins
   shell: cat "{{jenkins_dir}}{{ ssh_key_path }}/{{ssh_key_name}}"
   register: private_key
+- name: Set a variable with properly formatted private key
+  set_fact:
+    ssh_private_key_escaped: "{{ private_key.stdout | regex_replace('\n', '\\n') | regex_replace('\"', '\\\"') }}"
 # - name: Display public key
 #   ansible.builtin.debug:
 #     msg: "{{ private_key.stdout }}"
@@ -34,7 +37,7 @@
         import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 
         //String privateKeyText = new File('/ssh-keys/{{ssh_key_name}}').text
-        DirectEntryPrivateKeySource privateKeySource = new DirectEntryPrivateKeySource("{{private_key.stdout}}")
+        DirectEntryPrivateKeySource privateKeySource = new DirectEntryPrivateKeySource("{{ssh_private_key_escaped}}")
         Credentials privateKeyCredential = new BasicSSHUserPrivateKey(
           CredentialsScope.GLOBAL,     // scope
           'slave-private-key', // id
