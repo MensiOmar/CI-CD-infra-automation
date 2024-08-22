@@ -3,3 +3,10 @@ FROM {{agent_base_image}}
 
 # Install docker-cli and docker-compose
 RUN apk update && apk add docker-cli docker-compose
+
+# Add a docker group and make sure the appuser can access Docker
+RUN addgroup -S docker && \
+    addgroup jenkins docker
+
+# Allow the Docker socket to be accessible by the docker group
+RUN chmod 666 /var/run/docker.sock
