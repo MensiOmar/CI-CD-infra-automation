@@ -7,5 +7,5 @@
   become: true
   become_user: root
   roles:
-    - prerequisites
+    #- prerequisites
     - jenkins_agent_creation
