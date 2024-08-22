@@ -37,7 +37,9 @@
         import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl
 
         //String privateKeyText = new File('/ssh-keys/{{ssh_key_name}}').text
-        DirectEntryPrivateKeySource privateKeySource = new DirectEntryPrivateKeySource("{{ssh_private_key_escaped}}")
+        DirectEntryPrivateKeySource privateKeySource = new DirectEntryPrivateKeySource("""
+        {{ ssh_private_key_escaped }}
+        """)
         Credentials privateKeyCredential = new BasicSSHUserPrivateKey(
           CredentialsScope.GLOBAL,     // scope
           'slave-private-key', // id
