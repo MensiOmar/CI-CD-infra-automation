@@ -24,7 +24,19 @@
         //  agentLabels += " engine"
         //  println "That agent was for an engine builder, so updated label: $agentLabels"
       //}
-
+      ComputerLauncher launcher = new com.cloudbees.jenkins.plugins.sshslaves.SSHLauncher(
+        agentIP, // Host
+        new SSHConnectionDetails(
+                credentialID , // Credentials ID
+                {{ssh_agent_container_port}}, // port
+                null, // JavaPath
+                null, // JVM Options
+                null, // Prefix Start Agent Command
+                null, // Suffix Start Agent Command
+                false, // Log environment on initial connect
+                serverKeyVerificationStrategy // Host Key Verification Strategy
+        )
+      )
       // There is a constructor that also takes a list of properties (env vars) at the end, but haven't needed that yet
       DumbSlave dumb = new DumbSlave(
               agentName, // Agent name, usually matches the host computer's machine name
@@ -33,7 +45,7 @@
               agentExecutors, // Number of executors
               Mode.EXCLUSIVE, // "Usage" field, EXCLUSIVE is "only tied to node", NORMAL is "any"
               agentLabels, // Labels
-              new SSHLauncher(agentIP, {{ssh_agent_container_port}}, SSHLauncher.lookupSystemCredentials(credentialID), "", null, null, "", "", 60, 3, 15,hostKeyVerificationStrategy ),
+              launcher,
               RetentionStrategy.INSTANCE) // Is the "Availability" field and INSTANCE means "Always"
       Jenkins.instance.addNode(dumb)
       println "Agent '$agentName' created with $agentExecutors executors and home '$agentHome'"
