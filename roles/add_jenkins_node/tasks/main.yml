@@ -5,9 +5,8 @@
     add_jenkins_node_script: |
       import hudson.model.Node.Mode
       import hudson.slaves.*
-
-      
       import jenkins.model.Jenkins
+      import hudson.plugins.sshslaves.*
       import hudson.plugins.sshslaves.SSHLauncher
       import hudson.plugins.sshslaves.verifiers.*
 
@@ -26,7 +25,7 @@
         //  agentLabels += " engine"
         //  println "That agent was for an engine builder, so updated label: $agentLabels"
       //}
-      ComputerLauncher launcher = new com.cloudbees.jenkins.plugins.sshslaves.SSHLauncher(
+      ComputerLauncher launcher = new SSHLauncher(
         agentIP, // Host
         new SSHConnectionDetails(
                 credentialID , // Credentials ID
