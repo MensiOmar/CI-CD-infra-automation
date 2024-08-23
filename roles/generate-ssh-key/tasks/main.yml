@@ -24,8 +24,8 @@
 #     msg: "{{ private_key.stdout }}"
 - name: Set a variable
   set_fact:
-    ssh_public_key: "{{ ssh_key.public_key }}"
-    ssh_private_key: "{{ private_key.stdout }}"
+    ssh_public_key_jenkins_agent: "{{ ssh_key.public_key }}"
+    #ssh_private_key: "{{ private_key.stdout }}"
   #delegate_to: "{{agent_host}}"
 - name: Setting master using a variable to hold a more complicate script
   ansible.builtin.set_fact:
