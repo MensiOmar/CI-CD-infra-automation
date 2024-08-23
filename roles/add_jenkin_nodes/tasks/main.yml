@@ -1,0 +1,47 @@
+---
+# tasks file for add_jenkin_nodes
+- name: set jenkins groovy script to create a new node
+  ansible.builtin.set_fact:
+    add_jenkins_node_script: |
+      import hudson.model.Node.Mode
+      import hudson.slaves.*
+      import jenkins.model.Jenkins
+      import hudson.plugins.sshslaves.SSHLauncher
+      import com.cloudbees.jenkins.plugins.sshslaves.verification.*
+
+      ServerKeyVerificationStrategy serverKeyVerificationStrategy = new BlindTrustConnectionVerificationStrategy()
+      // The "build" object is added by the Jenkins Groovy plugin and can resolve parameters and such
+      String credentialID = build.buildVariableResolver.resolve("{{slave_credential_id}}")
+      String agentName = build.buildVariableResolver.resolve({{slave_name}})
+      String agentDescription = build.buildVariableResolver.resolve('ssh slave')
+      String agentIP = build.buildVariableResolver.resolve("{{slave_ip_host}}")
+
+      // Other parameters are just hard coded for now, adjust as needed
+      String agentHome = "/home/jenkins/agent"
+      String agentExecutors = 1
+      String agentLabels = ""
+      //if (agentName.contains("engine")) {
+        //  agentLabels += " engine"
+        //  println "That agent was for an engine builder, so updated label: $agentLabels"
+      //}
+
+      // There is a constructor that also takes a list of properties (env vars) at the end, but haven't needed that yet
+      DumbSlave dumb = new DumbSlave(
+              agentName, // Agent name, usually matches the host computer's machine name
+              agentDescription, // Agent description
+              agentHome, // Workspace on the agent's computer
+              agentExecutors, // Number of executors
+              Mode.EXCLUSIVE, // "Usage" field, EXCLUSIVE is "only tied to node", NORMAL is "any"
+              agentLabels, // Labels
+              new SSHLauncher(agentIP, {{ssh_agent_container_port}}, SSHLauncher.lookupSystemCredentials(credentialID), "", null, null, "", "", 60, 3, 15,serverKeyVerificationStrategy ),
+              RetentionStrategy.INSTANCE) // Is the "Availability" field and INSTANCE means "Always"
+      Jenkins.instance.addNode(dumb)
+      println "Agent '$agentName' created with $agentExecutors executors and home '$agentHome'"
+
+- name: add ssh agent credentials to jenkins master
+  community.general.jenkins_script:
+    script: "{{add_jenkins_node_script}}"
+    user: "{{jenkins_user}}"
+    password: "{{jenkins_password}}"
+    url: "{{jenkins_url}}"
+    validate_certs: false

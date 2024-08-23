@@ -42,7 +42,7 @@
         """)
         Credentials privateKeyCredential = new BasicSSHUserPrivateKey(
           CredentialsScope.GLOBAL,     // scope
-          'slave-private-key', // id
+          '{{slave_credential_id}}', // id
           'jenkins',                    // username
           privateKeySource,            // private key source
           '',                          // passphrase

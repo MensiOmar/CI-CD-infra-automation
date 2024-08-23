@@ -9,3 +9,8 @@
   roles:
     #- prerequisites
     - jenkins_agent_creation
+- name: create new node on jenkins master
+  become: true 
+  hosts: jenkins_server
+  roles:
+    -  add_jenkins_node

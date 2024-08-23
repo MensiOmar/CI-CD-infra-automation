@@ -38,7 +38,7 @@
       dockerfile: /home/custom_agent_dockerFile
 - name: Run Jenkins SSH Agent container
   ansible.builtin.shell: |
-    docker run -u root -d --restart=always --name={{ agent_container_name }} -p {{ssh_agent_publish_port}}:22 -v /var/run/docker.sock:/var/run/docker.sock -v /home/cdc/deployment:/deployment -v /srv:/srv -e "JENKINS_AGENT_SSH_PUBKEY={{ ssh_public_key_jenkins_agent }}" {{ agent_image }}
+    docker run -u root -d --restart=always  -p {{ssh_agent_publish_port}}:22 -v /var/run/docker.sock:/var/run/docker.sock -v /home/cdc/deployment:/deployment -v /srv:/srv -e "JENKINS_AGENT_SSH_PUBKEY={{ ssh_public_key_jenkins_agent }}" {{ agent_image }}
 - name: Display jenkins ssh credentials info
   ansible.builtin.debug:
     msg: 
