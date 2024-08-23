@@ -11,10 +11,10 @@
 
       SshHostKeyVerificationStrategy hostKeyVerificationStrategy = new NonVerifyingKeyVerificationStrategy()
       // The "build" object is added by the Jenkins Groovy plugin and can resolve parameters and such
-      String credentialID = build.buildVariableResolver.resolve("{{slave_credential_id}}")
-      String agentName = build.buildVariableResolver.resolve({{slave_name}})
-      String agentDescription = build.buildVariableResolver.resolve('ssh slave')
-      String agentIP = build.buildVariableResolver.resolve("{{slave_ip_host}}")
+      String credentialID = "{{slave_credential_id}}"
+      String agentName = {{slave_name}}
+      String agentDescription = 'ssh slave'
+      String agentIP = "{{slave_ip_host}}"
 
       // Other parameters are just hard coded for now, adjust as needed
       String agentHome = "/home/jenkins/agent"
