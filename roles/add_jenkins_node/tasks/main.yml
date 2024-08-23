@@ -5,6 +5,8 @@
     add_jenkins_node_script: |
       import hudson.model.Node.Mode
       import hudson.slaves.*
+
+      
       import jenkins.model.Jenkins
       import hudson.plugins.sshslaves.SSHLauncher
       import hudson.plugins.sshslaves.verifiers.*
