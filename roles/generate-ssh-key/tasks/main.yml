@@ -9,12 +9,12 @@
     group: 1000
 - name: Generate SSH key pair
   community.crypto.openssh_keypair:
-    path: "{{jenkins_dir}}{{ ssh_key_path }}/{{ssh_key_name}}"
+    path: "{{jenkins_dir}}{{ ssh_key_path }}/{{slave_credential_id}}"
     type: ed25519
     size: 2048
   register: ssh_key
 - name: Get the initial admin password for Jenkins
-  shell: cat "{{jenkins_dir}}{{ ssh_key_path }}/{{ssh_key_name}}"
+  shell: cat "{{jenkins_dir}}{{ ssh_key_path }}/{{slave_credential_id}}"
   register: private_key
 - name: Set a variable with properly formatted private key
   set_fact:
