@@ -1,47 +1,47 @@
 ---
 # tasks file for jenkins_plugins_installation
-# - name: Install plugin SonarQube Scanner
-#   community.general.jenkins_plugin:
-#     name: sonar
-#     url_username: "{{ jenkins_username }}"
-#     url_password: "{{ jenkins_password }}"
-#     url: "{{ jenkins_url }}"
-# - name: Install plugin Harbor
-#   community.general.jenkins_plugin:
-#     name: Harbor
-#     url_username: "{{ jenkins_username }}"
-#     url_password: "{{ jenkins_password }}"
-#     url: "{{ jenkins_url }}"
-# - name: Install plugin Maven Integration
-#   community.general.jenkins_plugin:
-#     name: maven-plugin
-#     url_username: "{{ jenkins_username }}"
-#     url_password: "{{ jenkins_password }}"
-#     url: "{{ jenkins_url }}"
-# - name: Install plugin Docker
-#   community.general.jenkins_plugin:
-#     name: docker-plugin
-#     url_username: "{{ jenkins_username }}"
-#     url_password: "{{ jenkins_password }}"
-#     url: "{{ jenkins_url }}"
-# - name: Install plugin Docker API
-#   community.general.jenkins_plugin:
-#     name: docker-java-api
-#     url_username: "{{ jenkins_username }}"
-#     url_password: "{{ jenkins_password }}"
-#     url: "{{ jenkins_url }}"
-# - name: Install plugin Dependency-check
-#   community.general.jenkins_plugin:
-#     name: dependency-check-jenkins-plugin
-#     url_username: "{{ jenkins_username }}"
-#     url_password: "{{ jenkins_password }}"
-#     url: "{{ jenkins_url }}"
-# - name: Install plugin Deploy to container
-#   community.general.jenkins_plugin:
-#     name: deploy
-#     url_username: "{{ jenkins_username }}"
-#     url_password: "{{ jenkins_password }}"
-#     url: "{{ jenkins_url }}"
+- name: Install plugin SonarQube Scanner
+  community.general.jenkins_plugin:
+    name: sonar
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
+- name: Install plugin Harbor
+  community.general.jenkins_plugin:
+    name: Harbor
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
+- name: Install plugin Maven Integration
+  community.general.jenkins_plugin:
+    name: maven-plugin
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
+- name: Install plugin Docker
+  community.general.jenkins_plugin:
+    name: docker-plugin
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
+- name: Install plugin Docker API
+  community.general.jenkins_plugin:
+    name: docker-java-api
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
+- name: Install plugin Dependency-check
+  community.general.jenkins_plugin:
+    name: dependency-check-jenkins-plugin
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
+- name: Install plugin Deploy to container
+  community.general.jenkins_plugin:
+    name: deploy
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
 - name: Install plugin SSH Agent
   community.general.jenkins_plugin:
     name: ssh-agent
