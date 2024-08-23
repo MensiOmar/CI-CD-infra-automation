@@ -42,3 +42,9 @@
     url_username: "{{ jenkins_username }}"
     url_password: "{{ jenkins_password }}"
     url: "{{ jenkins_url }}"
+- name: Install plugin SSH Agent
+  community.general.jenkins_plugin:
+    name: ssh-agent
+    url_username: "{{ jenkins_username }}"
+    url_password: "{{ jenkins_password }}"
+    url: "{{ jenkins_url }}"
