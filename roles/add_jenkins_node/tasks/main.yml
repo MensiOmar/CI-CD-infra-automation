@@ -27,16 +27,15 @@
       //}
       ComputerLauncher launcher = new SSHLauncher(
         agentIP, // Host
-        new SSHConnectionDetails(
-                credentialID , // Credentials ID
-                {{ssh_agent_container_port}}, // port
-                null, // JavaPath
-                null, // JVM Options
-                null, // Prefix Start Agent Command
-                null, // Suffix Start Agent Command
-                false, // Log environment on initial connect
-                serverKeyVerificationStrategy // Host Key Verification Strategy
-        )
+        credentialID , // Credentials ID
+        {{ssh_agent_container_port}}, // port
+        null, // JavaPath
+        null, // JVM Options
+        null, // Prefix Start Agent Command
+        null, // Suffix Start Agent Command
+        false, // Log environment on initial connect
+        serverKeyVerificationStrategy // Host Key Verification Strategy
+        
       )
       // There is a constructor that also takes a list of properties (env vars) at the end, but haven't needed that yet
       DumbSlave dumb = new DumbSlave(
