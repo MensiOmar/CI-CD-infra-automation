@@ -56,7 +56,7 @@
       Jenkins.instance.addNode(dumb)
       println "Agent '$agentName' created with $agentExecutors executors and home '$agentHome'"
 
-- name: add ssh agent credentials to jenkins master
+- name: create a new ssh node
   community.general.jenkins_script:
     script: "{{add_jenkins_node_script}}"
     user: "{{jenkins_user}}"

@@ -25,7 +25,6 @@
 #     mode: '0755'
 - name: Debug hostvars for agent_host
   ansible.builtin.debug:
-    #msg: "{{hostvars[agent_host]}}"
     msg: "{{ hostvars[jenkins_controller_machine_name].ssh_public_key_jenkins_agent }}"
 - name: copy custom SSH Agent dockerfile 
   ansible.builtin.template:
