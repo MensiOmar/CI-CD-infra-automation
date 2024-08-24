@@ -1,0 +1,65 @@
+---
+# tasks file for add_jenkin_nodes
+- name: set jenkins groovy script to create a new node
+  ansible.builtin.set_fact:
+    add_jenkins_node_script: |
+      import hudson.model.Node.Mode
+      import hudson.slaves.*
+      import jenkins.model.Jenkins
+      import hudson.plugins.sshslaves.*
+      import hudson.plugins.sshslaves.SSHLauncher
+      import hudson.plugins.sshslaves.verifiers.*
+
+      SshHostKeyVerificationStrategy hostKeyVerificationStrategy = new NonVerifyingKeyVerificationStrategy()
+      // The "build" object is added by the Jenkins Groovy plugin and can resolve parameters and such
+      String credentialID = "{{slave_credential_id}}"
+      String agentName = "{{slave_name}}"
+      String agentDescription = 'ssh slave'
+      String agentIP = "{{slave_ip_host}}"
+
+      // Other parameters are just hard coded for now, adjust as needed
+      String agentHome = "/home/jenkins/agent"
+      String agentExecutors = 1
+      String agentLabels = ""
+      
+      String jvmOptions = null // No custom JVM options
+      String javaPath = null // Use default Java path
+      String prefixStartSlaveCmd = null // No custom prefix command
+      String suffixStartSlaveCmd = null // No custom suffix command
+      Integer launchTimeoutSeconds = 60 // Timeout for SSH launch (in seconds)
+      Integer maxNumRetries = 5 // Max number of retries if connection fails
+      Integer retryWaitTime = 15 // Time to wait between retries (in seconds)
+
+      ComputerLauncher launcher = new SSHLauncher(
+        agentIP, // Host
+        {{ssh_agent_container_port}}, // port
+        credentialID , // Credentials ID
+        jvmOptions, // JVM Options
+        javaPath, // Java Path
+        prefixStartSlaveCmd, // Prefix Start Command
+        suffixStartSlaveCmd, // Suffix Start Command
+        launchTimeoutSeconds, // Launch Timeout in Seconds
+        maxNumRetries, // Maximum Number of Retries
+        retryWaitTime, // Retry Wait Time
+        hostKeyVerificationStrategy // Host Key Verification Strategy
+      )
+      // There is a constructor that also takes a list of properties (env vars) at the end, but haven't needed that yet
+      DumbSlave dumb = new DumbSlave(
+              agentName, // Agent name, usually matches the host computer's machine name
+              agentDescription, // Agent description
+              agentHome, // Workspace on the agent's computer
+              agentExecutors, // Number of executors
+              Mode.EXCLUSIVE, // "Usage" field, EXCLUSIVE is "only tied to node", NORMAL is "any"
+              agentLabels, // Labels
+              launcher,
+              RetentionStrategy.INSTANCE) // Is the "Availability" field and INSTANCE means "Always"
+      Jenkins.instance.addNode(dumb)
+      println "Agent '$agentName' created with $agentExecutors executors and home '$agentHome'"
+
+- name: create a new ssh node
+  community.general.jenkins_script:
+    script: "{{add_jenkins_node_script}}"
+    user: "{{jenkins_user}}"
+    password: "{{jenkins_password}}"
+    url: "{{jenkins_url}}"
+    validate_certs: false

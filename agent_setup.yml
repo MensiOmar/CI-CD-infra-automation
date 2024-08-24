@@ -2,10 +2,14 @@
   become: true 
   hosts: jenkins_server
   roles:
-    - generate-ssh-key
+    - create_jenkins_ssh_credentials
 - hosts : jenkins_agents
   become: true
   become_user: root
   roles:
-    - prerequisites
     - jenkins_agent_creation
+- name: create new node on jenkins master
+  become: true 
+  hosts: jenkins_server
+  roles:
+    -  add_jenkins_node

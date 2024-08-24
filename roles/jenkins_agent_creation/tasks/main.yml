@@ -25,7 +25,7 @@
 #     mode: '0755'
 - name: Debug hostvars for agent_host
   ansible.builtin.debug:
-    msg: "{{hostvars[agent_host]}}"
+    msg: "{{ hostvars[jenkins_controller_machine_name].ssh_public_key_jenkins_agent }}"
 - name: copy custom SSH Agent dockerfile 
   ansible.builtin.template:
     src: custom_agent_dockerFile.j2
@@ -37,11 +37,11 @@
       dockerfile: /home/custom_agent_dockerFile
 - name: Run Jenkins SSH Agent container
   ansible.builtin.shell: |
-    docker run -u root -d --restart=always --name={{ agent_container_name }} -p {{ssh_agent_publish_port}}:22 -v /var/run/docker.sock:/var/run/docker.sock -v /home/cdc/deployment:/deployment -v /srv:/srv -e "JENKINS_AGENT_SSH_PUBKEY={{ hostvars[agent_host]['ssh_public_key'] }}" {{ agent_image }}
+    docker run -u root -d --restart=always  -p {{ssh_agent_container_port}}:22 -v /var/run/docker.sock:/var/run/docker.sock -v /home/cdc/deployment:/deployment -v /srv:/srv -e "JENKINS_AGENT_SSH_PUBKEY={{ hostvars[jenkins_controller_machine_name].ssh_public_key_jenkins_agent }}" {{ agent_image }}
 - name: Display jenkins ssh credentials info
   ansible.builtin.debug:
     msg: 
       ssh_username: "jenkins"
       directory: "/home/jenkins/agent"
-      private_key: "{{ hostvars[agent_host]['private_key'].stdout_lines }}"
-      ssh_port: "{{ ssh_agent_publish_port }}"
+      #private_key: "{{ hostvars[agent_host]['private_key'].stdout_lines }}"
+      ssh_port: "{{ ssh_agent_container_port }}"
