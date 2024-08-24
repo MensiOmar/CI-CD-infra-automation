@@ -1,4 +1,5 @@
-- hosts : harbor_servers
+- name: harbor insallation
+  hosts : harbor_servers
   become: true
   become_user: root
   roles:
