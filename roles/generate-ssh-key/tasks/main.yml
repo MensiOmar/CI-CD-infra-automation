@@ -19,9 +19,9 @@
 - name: Set a variable with properly formatted private key
   set_fact:
     ssh_private_key_escaped: "{{ private_key.stdout | regex_replace('\n', '\\n') | regex_replace('\"', '\\\"') }}"
-# - name: Display public key
-#   ansible.builtin.debug:
-#     msg: "{{ private_key.stdout }}"
+- name: Display public key
+  ansible.builtin.debug:
+    msg: "{{ ssh_key.public_key }}"
 - name: Set a variable
   set_fact:
     ssh_public_key_jenkins_agent: "{{ ssh_key.public_key }}"
@@ -57,3 +57,6 @@
     password: "{{jenkins_password}}"
     url: "{{jenkins_url}}"
     validate_certs: false
+- name: Display public key
+  ansible.builtin.debug:
+    msg: "{{ ssh_public_key_jenkins_agent }}"
