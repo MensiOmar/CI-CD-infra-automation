@@ -1,0 +1,5 @@
+- name: install harbor
+  become: true 
+  hosts: harbor_servers
+  roles:
+    - harbor
