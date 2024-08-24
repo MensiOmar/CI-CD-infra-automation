@@ -21,21 +21,27 @@
       String agentHome = "/home/jenkins/agent"
       String agentExecutors = 1
       String agentLabels = ""
-      //if (agentName.contains("engine")) {
-        //  agentLabels += " engine"
-        //  println "That agent was for an engine builder, so updated label: $agentLabels"
-      //}
+      
+      String jvmOptions = null // No custom JVM options
+      String javaPath = null // Use default Java path
+      String prefixStartSlaveCmd = null // No custom prefix command
+      String suffixStartSlaveCmd = null // No custom suffix command
+      Integer launchTimeoutSeconds = 60 // Timeout for SSH launch (in seconds)
+      Integer maxNumRetries = 5 // Max number of retries if connection fails
+      Integer retryWaitTime = 15 // Time to wait between retries (in seconds)
+
       ComputerLauncher launcher = new SSHLauncher(
         agentIP, // Host
-        credentialID , // Credentials ID
         {{ssh_agent_container_port}}, // port
-        null, // JavaPath
-        null, // JVM Options
-        null, // Prefix Start Agent Command
-        null, // Suffix Start Agent Command
-        false, // Log environment on initial connect
+        credentialID , // Credentials ID
+        jvmOptions, // JVM Options
+        javaPath, // Java Path
+        prefixStartSlaveCmd, // Prefix Start Command
+        suffixStartSlaveCmd, // Suffix Start Command
+        launchTimeoutSeconds, // Launch Timeout in Seconds
+        maxNumRetries, // Maximum Number of Retries
+        retryWaitTime, // Retry Wait Time
         hostKeyVerificationStrategy // Host Key Verification Strategy
-        
       )
       // There is a constructor that also takes a list of properties (env vars) at the end, but haven't needed that yet
       DumbSlave dumb = new DumbSlave(
