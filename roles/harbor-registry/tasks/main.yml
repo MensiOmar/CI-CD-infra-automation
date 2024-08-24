@@ -1,0 +1,56 @@
+---
+### creation of cert let's encrypt using certbot 
+
+# tasks file for harbor-registry
+# - name: Ensure Certbot is installed
+#   apt:
+#     name: certbot
+#     state: present
+#     update_cache: yes
+# - name: Obtain SSL certificate for Harbor
+#   shell: certbot certonly --standalone -d {{ harbor_host }} --non-interactive --agree-tos -m {{ email }}
+#   args:
+#     creates: "{{certificate_path}}/{{ harbor_host }}"
+
+# - name: Create a cron job for automatic renewal
+#   cron:
+#     name: "Renew Let's Encrypt certificates"
+#     job: "0 0,12 * * * certbot renew --quiet"
+#     user: root
+
+### creation of cert using openssl
+
+# - name: Ensure directory exists for certificates
+#   file:
+#     path: "{{ cert_path }}"
+#     state: directory
+#     mode: '0755'
+# - name: Create self-signed SSL certificate and key
+#   shell: |
+#     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+#     -keyout {{ cert_path }}/{{ key_file }} \
+#     -out {{ cert_path }}/{{ cert_file }} \
+#     -subj "/CN={{ harbor_host }}"
+#   args:
+#     creates: "{{ cert_path }}/{{ cert_file }}"
+- name : Create main folder for harbor
+  file:
+    path: "{{harbor_dir}}"
+    state: directory
+- name: Download harbor official installation tgz package
+  get_url:
+    url: "https://github.com/goharbor/harbor/releases/download/v2.8.0/harbor-online-installer-v2.8.0.tgz"
+    dest: "{{harbor_dir}}/harbor-online-installer-v2.8.0.tgz"
+    mode: '0755'
+- name: extarct the installation package
+  unarchive:
+    src: "{{harbor_dir}}/harbor-online-installer-v2.8.0.tgz"
+    dest: "{{harbor_dir}}"
+    remote_src: yes
+- name: Copy harbor main configuration file
+  ansible.builtin.template:
+    src: "harbor.yml.j2"
+    dest: "{{harbor_dir}}/harbor/harbor.yml"
+- name: install harbor
+  ansible.builtin.shell:
+    "{{harbor_dir}}/harbor/install.sh --with-trivy"

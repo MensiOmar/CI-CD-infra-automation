@@ -1,0 +1,7 @@
+---
+# vars file for harbor-registry
+harbor_dir: /srv/harbor
+email : mensiomar80@gmail.com
+cert_path: /etc/letsencrypt/live/
+cert_file: harbor.cert
+key_file: harbor.key
