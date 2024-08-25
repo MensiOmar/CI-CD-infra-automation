@@ -3,7 +3,11 @@ FROM {{agent_base_image}}
 
 # Install docker-cli and docker-compose
 RUN apk update && apk add docker-cli docker-compose
+# Install Node.js and npm
+RUN apk add --no-cache nodejs npm
 
+# Install Maven
+RUN apk add --no-cache maven
 # Add a docker group and make sure the appuser can access Docker
 RUN addgroup -S docker && \
     addgroup jenkins docker
