@@ -5,7 +5,10 @@ FROM {{agent_base_image}}
 RUN apk update && apk add docker-cli docker-compose
 # Install Node.js and npm
 RUN apk add --no-cache nodejs npm
-
+# Install kubectl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+    && chmod +x kubectl \
+    && mv kubectl /usr/local/bin/
 # Install Maven
 RUN apk add --no-cache maven
 # Add a docker group and make sure the appuser can access Docker
