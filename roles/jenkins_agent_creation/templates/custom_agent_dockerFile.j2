@@ -1,6 +1,7 @@
 # Dockerfile
 FROM {{agent_base_image}}
-
+# Install curl
+RUN apk add --no-cache curl
 # Install docker-cli and docker-compose
 RUN apk update && apk add docker-cli docker-compose
 # Install Node.js and npm
