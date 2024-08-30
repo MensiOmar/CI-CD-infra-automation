@@ -1,0 +1,36 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: awx-web
+    app.kubernetes.io/instance: prometheus-operator
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 61.9.0
+    chart: kube-prometheus-stack-61.9.0
+    heritage: Helm
+    release: prometheus-operator
+  name: awx-web-monitor
+  namespace: monitoring
+spec:
+  jobLabel: awx-web-monitor
+  endpoints:
+  - interval: 50s
+    path: /api/v2/metrics/
+    port: http
+    scheme: http
+    tlsConfig:
+      insecureSkipVerify: true
+    authorization:
+      type: Bearer
+      credentials:
+        key: token
+        name: bearer-token-secret-prom
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: awx
+      app.kubernetes.io/managed-by: awx-operator
+  namespaceSelector:
+    matchNames:
+    - awx
+
