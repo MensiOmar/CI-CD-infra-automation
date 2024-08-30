@@ -1,0 +1,138 @@
+pipeline {
+    /*agent {
+        label 'built-in'  // or use 'built-in' depending on your Jenkins version
+    }*/
+    agent {
+        label 'agent label'
+    }
+    tools {
+        jdk 'jdk'
+        maven 'maven3'
+    }
+    
+    environment {
+        SCANNER_HOME= tool 'sonar-scanner'
+    }
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/MensiOmar/Boardgame.git'
+            }
+        }
+        stage('Set Permissions') {
+            steps {
+                // Grant execute permission to the mvnw script
+                sh 'chmod +x mvnw'
+            }
+        }
+        stage('Compile') {
+            steps {
+                sh "./mvnw compile"
+            }
+        }
+        stage('Test') {
+            steps {
+                sh "./mvnw test"
+            }
+        }
+        stage('Scan dependencies') {
+            steps {
+                /*script {
+                    // Run Dependency-Check scan using Docker
+                    sh '''
+                    docker run --rm -v $(pwd):/src -v $(pwd)/odc-data:/usr/share/dependency-check/data \
+                    owasp/dependency-check --project "My Project" --scan . --out . --format ALL
+                    '''
+                }*/
+                script {
+                    // Create a directory for Trivy reports
+                    sh 'mkdir -p trivy-reports'
+
+                    // Run Trivy to scan the current project directory
+                    sh '''
+                        docker pull aquasec/trivy
+                        docker run --rm \
+                            -v $(pwd):/project \
+                            -v $(pwd)/trivy-reports:/reports \
+                            aquasec/trivy fs \
+                            --scanners vuln,secret,misconfig --severity HIGH,CRITICAL \
+                            -o /reports/dependency-scan.json \
+                            /project
+                    '''
+                }
+
+            }
+        }
+        stage('Publish Results') {
+            steps {
+                // Archive Trivy scan results as artifacts
+                archiveArtifacts artifacts: 'trivy-reports/dependency-scan.json', allowEmptyArchive: true
+            }
+        }
+        stage('SonarQube scan') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh ''' 
+                    $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=BoardGame -Dsonar.projectKey=BoardGame -Dsonar.java.binaries=. -Dsonar.exclusions=**/*.js,**/*.jsx,**/*.ts,**/*.tsx 
+                    '''
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh "./mvnw package"
+            }
+        }
+        stage('build docker image'){
+            steps{
+                withDockerRegistry(credentialsId: 'harbor-reg', url: 'http://1.1.1.1/') {
+                // some block
+                sh "docker build -t 192.168.26.25/demo/boardgame:latest ."
+                }
+            }
+            
+        }
+        stage('push docker image'){
+            steps{
+               withDockerRegistry(credentialsId: 'harbor-reg', url: 'http://1.1.1.1/') {
+                // some block
+                sh "docker push 192.168.26.25/demo/boardgame:latest "
+                } 
+            }
+            
+        }
+        stage('deploy to k8s cluster'){
+            steps{
+               withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://1.1.1.1:643443') {
+                    sh "kubectl apply -f deployment-service.yaml"
+                }
+            }
+            
+        }
+        stage('get deployment info'){
+            steps{
+               withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8s-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://1.1.1.1:643443') {
+                    sh '''
+                    kubectl get pods -n prod
+                    kubectl get svc -n prod
+                    '''
+                }
+            }
+            
+        }
+    }
+    /*post {
+        always {
+            // Archive Dependency-Check report
+            //archiveArtifacts artifacts: 'dependency-check-report/**', allowEmptyArchive: true
+            // Publish report if the Dependency-Check Jenkins plugin is installed
+            //dependencyCheckPublisher pattern: 'dependency-check-report/dependency-check-report.xml'
+            
+        }
+    }*/
+}
